@@ -4,17 +4,17 @@ from numba import njit, prange
 
 @njit()
 def get_idx_periodic(i, ii, shape):
-    return (i + ii)%shape
+    return (i + ii) % shape
 
 
 @njit()
 def get_idx(i, ii, shape):
-    return (i + ii)
+    return i + ii
 
 
 @njit(parallel=True)
-def update_grid2d(grid_in, periodic_bc = True):
-    nb_struct = np.array([[-1, -1], [-1,  0], [-1,  1], [ 0, -1], [ 0,  1], [ 1, -1], [ 1,  0], [ 1,  1]])
+def update_grid2d(grid_in, periodic_bc=True):
+    nb_struct = np.array([[-1, -1], [-1,  0], [-1,  1], [0, -1], [0,  1], [1, -1], [1,  0], [1,  1]])
     grid_out = np.zeros_like(grid_in)
     shapex, shapey = grid_out.shape
     
