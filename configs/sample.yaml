@@ -1,0 +1,16 @@
+global_param:
+  canvas_size: [360, 360] #[1080, 1917]
+  export_size: [1080, 1920]
+  export_path: "./test/"
+  name: "triangle_clip"
+  max_iterations: 500
+  fps: 60
+  render: BasicAnimation
+
+_param:
+  - &triangle {'name': 'multi_triangle', kwargs: {height: 120,
+                                                  guns_offsets: [6, 40], heights_offsets: [0, 10]}}
+
+timeline:
+  0:
+    - {type: 'macro', kwargs: {pos:[150, 179], kwargs: *triangle, centered: true}}
