@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from mobiusgol.utils import add_pattern_from_macro, add_pattern_from_file
-from mobiusgol.gol_step import update_grid2d
+from moebiusgol.utils import add_pattern_from_macro, add_pattern_from_file
+from moebiusgol.gol_step import update_grid2d
 import numpy as np
 from PIL import Image
 import os

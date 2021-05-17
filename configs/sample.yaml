@@ -14,3 +14,4 @@ _param:
 timeline:
   0:
     - {type: 'macro', kwargs: {pos:[150, 179], kwargs: *triangle, centered: true}}
+    #- {type: 'file', kwargs: {path: 'patterns/2c5puffer1.rle', pos: [0, 0]}}

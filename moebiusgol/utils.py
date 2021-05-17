@@ -65,7 +65,7 @@ def add_pattern_from_macro(x, kwargs, pos, angle=0, flip=(1, 1), centered=False)
     return add_pattern(x, pattern, pos, angle, flip, centered)
 
 
-def load_macro(name, kwargs=None, source='temple_macro', module_base='mobiusgol.macro'):
+def load_macro(name, kwargs=None, source='temple_macro', module_base='moebiusgol.macro'):
     module = f'{module_base}.{source}'
     m = importlib.import_module(module)
     kwargs = {} if kwargs is None else kwargs

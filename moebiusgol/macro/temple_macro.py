@@ -1,4 +1,4 @@
-from mobiusgol.utils import add_pattern_from_file, add_pattern, read_pattern_shape
+from moebiusgol.utils import add_pattern_from_file, add_pattern, read_pattern_shape
 import numpy as np
 
 
