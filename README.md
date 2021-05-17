@@ -1,1 +1,1 @@
-# mobius-game-of-life
+# moebius-game-of-life
