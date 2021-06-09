@@ -1,7 +1,7 @@
 global_param:
   canvas_size: [360, 360] #[1080, 1917]
   export_size: [1080, 1920]
-  export_path: "./test/"
+  export_path: "./sample/"
   name: "triangle_clip"
   max_iterations: 500
   fps: 60
@@ -14,4 +14,3 @@ _param:
 timeline:
   0:
     - {type: 'macro', kwargs: {pos:[150, 179], kwargs: *triangle, centered: true}}
-    #- {type: 'file', kwargs: {path: 'patterns/2c5puffer1.rle', pos: [0, 0]}}

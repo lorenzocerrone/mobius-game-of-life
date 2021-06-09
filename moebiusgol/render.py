@@ -21,6 +21,9 @@ class BaseRender:
         self.max_iterations = global_config['max_iterations']
         self.export_path = global_config['export_path']
         self.export_size = global_config['export_size']
+        self.do_rescale = global_config['rescale']
+        self.do_crop_center = global_config['crop_center']
+
         self.fps = global_config['fps']
         self.name = global_config['name']
 
@@ -57,12 +60,25 @@ class BaseRender:
                          (math.floor(diff_y/2), math.ceil(diff_y/2))))
         return im
 
+    def crop(self, im):
+        im = im[self.canvas_size[0]//2 - self.export_size[0]//2:self.canvas_size[0]//2 + self.export_size[0]//2,
+                self.canvas_size[1]//2 - self.export_size[1]//2:self.canvas_size[1]//2 + self.export_size[1]//2]
+        return im
+
     def save_png(self):
         export_frames_path = os.path.join(self.export_path, 'frames')
         os.makedirs(export_frames_path, exist_ok=True)
         for _ in tqdm.tqdm(range(self.max_iterations)):
             self.step()
-            im = self.rescale(self.gol_state)
+            if self.do_rescale:
+                im = self.rescale(self.gol_state)
+
+            elif self.do_crop_center:
+                im = self.crop(self.gol_state)
+
+            else:
+                raise NotImplemented
+
             im = im[::-1]
 
             im = Image.fromarray(255 * im)

@@ -39,7 +39,7 @@ def basic_triangle(height=30, guns_offset=6, add_lines=False):
     return x
 
 
-def multi_triangle(height=30, guns_offsets=(6, 50), heights_offsets=(0, 10), add_lines=(True, False)):
+def multi_triangle(height=120, guns_offsets=(6, 50), heights_offsets=(0, 10), add_lines=(True, False)):
     patterns = []
     for offset, h_offset, lines in zip(guns_offsets, heights_offsets, add_lines):
         patterns.append(basic_triangle(height=height + 2 * h_offset, guns_offset=offset, add_lines=lines))
@@ -49,28 +49,19 @@ def multi_triangle(height=30, guns_offsets=(6, 50), heights_offsets=(0, 10), add
                   largest_shape[1] + max(heights_offsets)))
     for pattern, offset in zip(patterns, heights_offsets):
         x = add_pattern(x, pattern, (largest_shape[0] // 2 + offset, largest_shape[1] // 2), centered=True)
+
+    x = np.pad(x, 2)
     return x
 
 
-def multi_triangle_row_odd(shape, num_pattern=6, layer=3):
-    x = np.zeros(shape)
-    triangle = multi_triangle(height=120, guns_offsets=[6, 40], heights_offsets=[0, 10])
-    left_triangle = triangle[:, 0:triangle.shape[1] // 2 + 1]
-    right_triangle = triangle[:, triangle.shape[1] // 2 - 2:]
-    h_offset = 240
-    h_offset2 = 20
-
-    x = add_pattern(x, triangle, (triangle.shape[0] // 2 + 4 * (triangle.shape[0] + h_offset2) + h_offset,
-                                           shape[1] // 2 - triangle.shape[1] // 2))
-    x = add_pattern(x, triangle, (triangle.shape[0] // 2 + 4 * (triangle.shape[0] + h_offset2) + h_offset,
-                                           shape[1] // 2 + triangle.shape[1] // 2))
-    x = add_pattern(x, triangle, (triangle.shape[0] // 2 + 4 * (triangle.shape[0] + h_offset2) + h_offset,
-                                           shape[1] // 2 - 3 * triangle.shape[1] // 2))
-    x = add_pattern(x, triangle, (triangle.shape[0] // 2 + 4 * (triangle.shape[0] + h_offset2) + h_offset,
-                                           shape[1] // 2 + 3 * triangle.shape[1] // 2))
-
-    x = add_pattern(x, right_triangle, (triangle.shape[0] // 2 + 4 * (triangle.shape[0] + h_offset2) + h_offset,
-                              shape[1] // 2 - 3 * triangle.shape[1] // 2 - 3 * right_triangle.shape[1] // 2))
-    x = add_pattern(x, left_triangle, (triangle.shape[0] // 2 + 4 * (triangle.shape[0] + h_offset2) + h_offset,
-                                                shape[1] // 2 + 3 * triangle.shape[1] // 2 + 3 * right_triangle.shape[
-                                                    1] // 2))
+def multi_triangle_row_odd(layers=1):
+    triangle = multi_triangle()
+    triangle_shape = triangle.shape
+    x = np.zeros((layers * triangle_shape[0] + 1, layers * triangle_shape[1] + 1))
+    x_shape = x.shape
+    for layer in range(layers - 1, -1, -1):
+        for _layer in range(layer + 1):
+            x = add_pattern(x, triangle, ((2 * (layer + 1) - 1) * triangle_shape[0]//2,
+                                          x_shape[1]//2 - layer * triangle_shape[1]//2 + _layer * triangle_shape[1]),
+                            centered=True)
+    return x
