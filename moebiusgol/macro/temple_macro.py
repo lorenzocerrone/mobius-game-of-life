@@ -39,7 +39,7 @@ def basic_triangle(height=30, guns_offset=6, add_lines=False):
     return x
 
 
-def multi_triangle(height=120, guns_offsets=(6, 50), heights_offsets=(0, 10), add_lines=(True, False)):
+def multi_triangle(height=120, guns_offsets=(6, 50), heights_offsets=(0, 10), pad=2, add_lines=(True, False)):
     patterns = []
     for offset, h_offset, lines in zip(guns_offsets, heights_offsets, add_lines):
         patterns.append(basic_triangle(height=height + 2 * h_offset, guns_offset=offset, add_lines=lines))
@@ -50,16 +50,37 @@ def multi_triangle(height=120, guns_offsets=(6, 50), heights_offsets=(0, 10), ad
     for pattern, offset in zip(patterns, heights_offsets):
         x = add_pattern(x, pattern, (largest_shape[0] // 2 + offset, largest_shape[1] // 2), centered=True)
 
-    x = np.pad(x, 2)
+    x = np.pad(x, pad)
     return x
 
 
-def multi_triangle_row_odd(layers=1):
-    triangle = multi_triangle()
+def multi_triangle_row_odd(layers=1, pad=2):
+    triangle = multi_triangle(pad=pad)
     triangle_shape = triangle.shape
     x = np.zeros((layers * triangle_shape[0] + 1, layers * triangle_shape[1] + 1))
     x_shape = x.shape
     for layer in range(layers - 1, -1, -1):
+        for _layer in range(layer + 1):
+            x = add_pattern(x, triangle, ((2 * (layer + 1) - 1) * triangle_shape[0]//2,
+                                          x_shape[1]//2 - layer * triangle_shape[1]//2 + _layer * triangle_shape[1]),
+                            centered=True)
+    return x
+
+
+def basic_triangle_halfmaxv3(pad=0, path="./patterns/halfmaxv3.rle"):
+    shape = read_pattern_shape(path)
+    x = np.zeros(shape)
+    x = add_pattern_from_file(x, path, pos=(0, 0))
+    x = np.pad(x, pad)
+    return x
+
+
+def multi_triangle_row_odd_halmaxv3(layers=1, layers_min=0, pad=0):
+    triangle = basic_triangle_halfmaxv3(pad=pad)
+    triangle_shape = triangle.shape
+    x = np.zeros((layers * triangle_shape[0] + 1, layers * triangle_shape[1] + 1))
+    x_shape = x.shape
+    for layer in range(layers - 1, layers_min - 1, -1):
         for _layer in range(layer + 1):
             x = add_pattern(x, triangle, ((2 * (layer + 1) - 1) * triangle_shape[0]//2,
                                           x_shape[1]//2 - layer * triangle_shape[1]//2 + _layer * triangle_shape[1]),
